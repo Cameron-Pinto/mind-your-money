@@ -1,0 +1,17 @@
+{% load i18n %}
+<input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
+<label class="form-check-label" for="flexCheckDefault">Remember me</label>
+<br>
+{% if wizard.steps.prev %}
+  <button name="wizard_goto_step" type="submit"
+          value="{{ wizard.steps.prev }}"
+          class="btn btn-secondary">{% trans "Back" %}</button>
+{% endif %}
+<br>
+<button type="submit" class="btn btn-dark w-100 py-2">{% trans "Sign in" %}</button>
+<br>
+<br>
+<p class="mt-5 mt-3 text-body-primary">Don't have an account?</p>
+<br>
+<a class="btn btn-light w-100 py-2" href="/sign-up">Register</a>
+<p class="mt-5 mb-3 text-body-secondary">© 2024</p>

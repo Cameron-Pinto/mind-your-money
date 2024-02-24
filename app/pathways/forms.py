@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.db import models
 
+from django_recaptcha.fields import ReCaptchaField
+
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -20,3 +22,4 @@ class RegisterForm(UserCreationForm):
             'password1',
             'password2'
         ]
+    captcha = ReCaptchaField()

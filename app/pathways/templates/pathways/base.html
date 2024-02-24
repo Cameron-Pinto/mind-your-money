@@ -5,62 +5,89 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>MindYourMoney</title>
-   <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/lux/bootstrap.min.css">
    <link rel="stortcut icon" type="image/png" href="{% static 'images/favicon-32x32.png'%}"/>
    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
+    <style>
+        .nav-link {
+            position: relative;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-link::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: white;
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover::before {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            border: none;
+            box-shadow: none;
+        }
+
+        .dropdown-menu {
+            border: none !important;
+        }
+
+        .dropdown-menu a:hover {
+            text-decoration: underline;
+            text-decoration-color: white;
+        }
+    </style>
 </head>
-<body>
-    <nav class="navbar navbar-expand-md bg-dark sticky-top border-bottom" data-bs-theme="dark">
-       <div class="container">
-          <a class="navbar-brand" href="/home">
-            <img src="{% static 'images/logo-white.png' %}" height="40px" />
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas" aria-controls="offcanvas" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
-             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasLabel">MindYourMoney</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-             </div>
-             <div class="offcanvas-body">
-                <ul class="navbar-nav flex-grow-1 justify-content-between">
-                   <li class="nav-item">
-                      <a class="nav-link" href="#">
-                         <svg class="bi" width="24" height="24">
-                            <use xlink:href="#aperture"></use>
-                         </svg>
-                      </a>
-                   </li>
-                   <li class="nav-item"><a class="nav-link" href="#">Budget Projection</a></li>
-                   <li class="nav-item"><a class="nav-link" href="#">Portfolio</a></li>
-                   <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
-                   {% if user.is_authenticated %}
-                   <li class "nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-                   {% else %}
-                   <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-                   {% endif %}
-                   <li class="nav-item">
-                      <a class="nav-link" href="#">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                           <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                        </svg>
-                      </a>
-                   </li>
-                </ul>
-             </div>
-          </div>
-       </div>
-    </nav>
+    <header class="mx-auto">
+        <div class="text-center mb-3">
+            <a class="navbar-brand" href="/home">
+                <img src="{% static 'images/logo-no-background.png' %}" height="80px" />
+            </a>
+        </div>
+        {% block navbar %}
+        <nav class="nav nav-masthead justify-content-center">
+            <a class="nav-link fw-bold py-1 px-3 active text-white" aria-current="page" href="dashboard">Dashboard</a>
+            <a class="nav-link fw-bold py-1 px-3 active text-white" href="#">Portfolio</a>
+            <a class="nav-link fw-bold py-1 px-3 active text-white" href="#">Budget Projection</a>
+            {% if user.is_authenticated %}
+                <div class="nav-item dropdown">
+                    <a class="nav-link fw-bold py-1 px-3 active text-white dropdown-toggle" id="loginDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Logged in as {{ user.first_name }}
+                    </a>
+                    <div class="dropdown-menu text-white bg-transparent border-0" aria-labelledby="loginDropdown">
+                        <a class="dropdown-item fw-bold text-white bg-transparent" href="/settings">Settings</a>
+                        <a class="dropdown-item fw-bold text-white bg-transparent" href="/logout">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <a class="nav-link fw-bold py-1 px-3 active text-white" href="{% url 'two_factor:login' %}">
+                    Login
+                </a>
+            {% endif %}
+        </nav>
+        {% endblock %}
+    </header>
+<body class="d-flex h-100 text-center text-bg-dark">
     <div class="container">
         {% block content %}
         {% endblock %}
     </div>
-   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 
 </html>
